@@ -17,6 +17,8 @@ namespace Dino
         Timer mainTimer;
         bool isMouseDown = false;
         private Label scoreLabel;
+        private Button startButton;
+        private bool isGameStarted = false;
 
         public Form1()
         {
@@ -30,18 +32,10 @@ namespace Dino
             this.KeyDown += new KeyEventHandler(OnKeyboardDown);
             this.MouseDown += new MouseEventHandler(OnMouseDown);
             this.MouseUp += new MouseEventHandler(OnMouseUp);
+
             mainTimer = new Timer();
             mainTimer.Interval = 10;
             mainTimer.Tick += new EventHandler(Update);
-
-            // Создание Label для вывода очков
-            scoreLabel = new Label();
-            scoreLabel.Text = "0";
-            scoreLabel.AutoSize = true;
-            //scoreLabel.Font = new Font(scoreLabel.Font.FontFamily, scoreLabel.Font.Size * 3, FontStyle.Bold);
-            scoreLabel.Font = new Font(scoreLabel.Font.FontFamily, scoreLabel.Font.Size * 2, FontStyle.Bold);
-            scoreLabel.Location = new Point(this.Width - scoreLabel.Width - 10, 10);
-            this.Controls.Add(scoreLabel);
 
             Init();
         }
@@ -128,24 +122,59 @@ namespace Dino
         {
             GameController.Init();
             player = new Player(new PointF(50, 149), new Size(50, 50));
-            player.score = 0; // Обнуление счетчика
-            mainTimer.Start();
-            Invalidate();
+
+            scoreLabel = new Label();
+            scoreLabel.Text = "0";
+            scoreLabel.AutoSize = true;
+            scoreLabel.Font = new Font(scoreLabel.Font.FontFamily, scoreLabel.Font.Size * 3, FontStyle.Bold);
+            scoreLabel.Location = new Point(this.Width - scoreLabel.Width - 10, 10);
+            this.Controls.Add(scoreLabel);
+
+            startButton = new Button();
+            startButton.Text = "Start";
+            startButton.AutoSize = true;
+            startButton.Location = new Point(10, 10);
+            startButton.Click += new EventHandler(StartButton_Click);
+            this.Controls.Add(startButton);
         }
 
+        private void StartButton_Click(object sender, EventArgs e)
+        {
+            StartGame();
+        }
+
+        private void StartGame()
+        {
+            GameController.Init();
+            player = new Player(new PointF(50, 149), new Size(50, 50));
+            player.score = 0;
+            mainTimer.Start();
+            isGameStarted = true;
+            startButton.Enabled = false;
+        }
 
         public void Update(object sender, EventArgs e)
         {
+            if (!isGameStarted)
+                return;
+
             player.score++;
-            scoreLabel.Text = player.score.ToString(); // Обновление текста очков
+            scoreLabel.Text = player.score.ToString();
             if (player.physics.Collide())
             {
-                Init(); // Перезапуск игры при столкновении
-                return; // Выход из метода Update() для предотвращения продолжения обновлений после перезапуска
+                EndGame();
+                return;
             }
             player.physics.ApplyPhysics();
             GameController.MoveMap();
             Invalidate();
+        }
+
+        private void EndGame()
+        {
+            mainTimer.Stop();
+            isGameStarted = false;
+            startButton.Enabled = true;
         }
 
         private void DrawGame(object sender, PaintEventArgs e)

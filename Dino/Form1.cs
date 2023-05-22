@@ -15,6 +15,8 @@ namespace Dino
     {
         Player player;
         Timer mainTimer;
+        bool isMouseDown = false;
+
         public Form1()
         {
             InitializeComponent();
@@ -25,6 +27,8 @@ namespace Dino
             this.Paint += new PaintEventHandler(DrawGame);
             this.KeyUp += new KeyEventHandler(OnKeyboardUp);
             this.KeyDown += new KeyEventHandler(OnKeyboardDown);
+            this.MouseDown += new MouseEventHandler(OnMouseDown);
+            this.MouseUp += new MouseEventHandler(OnMouseUp);
             mainTimer = new Timer();
             mainTimer.Interval = 10;
             mainTimer.Tick += new EventHandler(Update);
@@ -40,7 +44,6 @@ namespace Dino
                     if (!player.physics.isJumping)
                     {
                         player.physics.isCrouching = true;
-                        player.physics.isJumping = false;
                         player.physics.transform.size.Height = 25;
                         player.physics.transform.position.Y = 174;
                     }
@@ -67,6 +70,50 @@ namespace Dino
             }
         }
 
+        private void OnMouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                // Левый клик - прыжок
+                if (!player.physics.isCrouching)
+                {
+                    player.physics.isCrouching = false;
+                    player.physics.AddForce();
+                }
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                // Правый клик - присесть
+                if (!player.physics.isJumping)
+                {
+                    if (!player.physics.isCrouching)
+                    {
+                        player.physics.isCrouching = true;
+                        player.physics.transform.size.Height = 25;
+                        player.physics.transform.position.Y = 174;
+                    }
+                    else
+                    {
+                        // Если уже в состоянии приседания, отменить приседание
+                        player.physics.isCrouching = false;
+                        player.physics.transform.size.Height = 50;
+                        player.physics.transform.position.Y = 150.2f;
+                    }
+                }
+            }
+
+            isMouseDown = true;
+        }
+
+        private void OnMouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                // Отпускание левой кнопки мыши
+                isMouseDown = false;
+            }
+        }
+
         public void Init()
         {
             GameController.Init();
@@ -75,7 +122,7 @@ namespace Dino
             Invalidate();
         }
 
-        public void Update(object sender , EventArgs e)
+        public void Update(object sender, EventArgs e)
         {
             player.score++;
             this.Text = "Dino - Score: " + player.score;

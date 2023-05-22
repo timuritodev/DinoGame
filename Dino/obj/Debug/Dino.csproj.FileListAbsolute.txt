@@ -8,3 +8,13 @@
 \\Mac\Home\Desktop\labs\ChromeDino-c-sharp\Dino\obj\Debug\Dino.csproj.CoreCompileInputs.cache
 \\Mac\Home\Desktop\labs\ChromeDino-c-sharp\Dino\obj\Debug\Dino.exe
 \\Mac\Home\Desktop\labs\ChromeDino-c-sharp\Dino\obj\Debug\Dino.pdb
+\\Mac\Home\Desktop\labs\DinoGame\Dino\bin\Debug\Dino.exe.config
+\\Mac\Home\Desktop\labs\DinoGame\Dino\bin\Debug\Dino.exe
+\\Mac\Home\Desktop\labs\DinoGame\Dino\bin\Debug\Dino.pdb
+\\Mac\Home\Desktop\labs\DinoGame\Dino\obj\Debug\Dino.csproj.AssemblyReference.cache
+\\Mac\Home\Desktop\labs\DinoGame\Dino\obj\Debug\Dino.csproj.SuggestedBindingRedirects.cache
+\\Mac\Home\Desktop\labs\DinoGame\Dino\obj\Debug\Dino.Properties.Resources.resources
+\\Mac\Home\Desktop\labs\DinoGame\Dino\obj\Debug\Dino.csproj.GenerateResource.cache
+\\Mac\Home\Desktop\labs\DinoGame\Dino\obj\Debug\Dino.csproj.CoreCompileInputs.cache
+\\Mac\Home\Desktop\labs\DinoGame\Dino\obj\Debug\Dino.exe
+\\Mac\Home\Desktop\labs\DinoGame\Dino\obj\Debug\Dino.pdb

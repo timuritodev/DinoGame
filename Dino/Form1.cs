@@ -16,6 +16,7 @@ namespace Dino
         Player player;
         Timer mainTimer;
         bool isMouseDown = false;
+        private Label scoreLabel;
 
         public Form1()
         {
@@ -32,6 +33,15 @@ namespace Dino
             mainTimer = new Timer();
             mainTimer.Interval = 10;
             mainTimer.Tick += new EventHandler(Update);
+
+            // Создание Label для вывода очков
+            scoreLabel = new Label();
+            scoreLabel.Text = "0";
+            scoreLabel.AutoSize = true;
+            //scoreLabel.Font = new Font(scoreLabel.Font.FontFamily, scoreLabel.Font.Size * 3, FontStyle.Bold);
+            scoreLabel.Font = new Font(scoreLabel.Font.FontFamily, scoreLabel.Font.Size * 2, FontStyle.Bold);
+            scoreLabel.Location = new Point(this.Width - scoreLabel.Width - 10, 10);
+            this.Controls.Add(scoreLabel);
 
             Init();
         }
@@ -118,16 +128,21 @@ namespace Dino
         {
             GameController.Init();
             player = new Player(new PointF(50, 149), new Size(50, 50));
+            player.score = 0; // Обнуление счетчика
             mainTimer.Start();
             Invalidate();
         }
 
+
         public void Update(object sender, EventArgs e)
         {
             player.score++;
-            this.Text = "Dino - Score: " + player.score;
+            scoreLabel.Text = player.score.ToString(); // Обновление текста очков
             if (player.physics.Collide())
-                Init();
+            {
+                Init(); // Перезапуск игры при столкновении
+                return; // Выход из метода Update() для предотвращения продолжения обновлений после перезапуска
+            }
             player.physics.ApplyPhysics();
             GameController.MoveMap();
             Invalidate();
